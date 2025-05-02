@@ -2,185 +2,161 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Ton Signe Astrologique</title>
+  <title>Mon Thème Astral</title>
   <link href="https://fonts.googleapis.com/css2?family=Agrandir&display=swap" rel="stylesheet">
   <style>
     body {
       font-family: 'Agrandir', sans-serif;
-      background-color: #1a0033;
+      background-color: #281a60;
       color: white;
       text-align: center;
       padding: 40px;
     }
 
-    input, button {
-      font-size: 18px;
+    input, button, select {
       padding: 10px;
       margin: 10px;
       border-radius: 5px;
+      font-size: 16px;
       border: none;
     }
 
     button {
       background-color: white;
-      color: #1a0033;
-      font-weight: bold;
+      color: #281a60;
       cursor: pointer;
     }
 
     #resultat {
       margin-top: 30px;
-      font-size: 20px;
-      max-width: 700px;
+      text-align: left;
+      background-color: rgba(255, 255, 255, 0.1);
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 600px;
       margin-left: auto;
       margin-right: auto;
     }
 
-    img {
-      width: 100px;
-      margin-top: 15px;
+    ul {
+      list-style-type: none;
+      padding-left: 0;
+    }
+
+    li {
+      margin-bottom: 6px;
     }
   </style>
 </head>
 <body>
 
-  <h1>Découvre ton signe astrologique</h1>
+  <h1>Découvre ton thème astral complet</h1>
 
-  <input type="text" id="prenom" placeholder="Ton prénom" /><br>
-  <input type="date" id="dateNaissance" /><br>
-
-  <button onclick="trouverSigne()">Voir mon signe</button>
+  <form id="formulaire">
+    <input type="text" id="prenom" placeholder="Ton prénom" required><br>
+    <label for="date">Date de naissance :</label><br>
+    <input type="date" id="date" required><br>
+    <label for="heure">Heure de naissance :</label><br>
+    <input type="time" id="heure" required><br>
+    <input type="text" id="ville" placeholder="Ville de naissance" required><br>
+    <button type="submit">Voir mon thème astral</button>
+  </form>
 
   <div id="resultat"></div>
 
   <script>
-    const signes = {
-      "Bélier": {
-        image: "https://upload.wikimedia.org/wikipedia/commons/9/9b/Aries_symbol_%28bold%29.svg",
-        description: "Le Bélier est dynamique, impulsif et courageux. Il adore les défis et fonce sans hésiter.",
-        qualites: "Énergie, leadership, passion",
-        defauts: "Impulsivité, impatience",
-        compatibilite: "Lion, Sagittaire, Gémeaux"
-      },
-      "Taureau": {
-        image: "https://upload.wikimedia.org/wikipedia/commons/3/3a/Taurus_symbol_%28bold%29.svg",
-        description: "Le Taureau est stable, fidèle et aime le confort. Il avance lentement mais sûrement.",
-        qualites: "Fiabilité, sensualité, patience",
-        defauts: "Entêtement, lenteur",
-        compatibilite: "Vierge, Capricorne, Cancer"
-      },
-      "Gémeaux": {
-        image: "https://upload.wikimedia.org/wikipedia/commons/8/8b/Gemini_symbol_%28bold%29.svg",
-        description: "Le Gémeaux est curieux, sociable et plein d’idées. Il adore communiquer et bouger.",
-        qualites: "Vivacité d’esprit, humour, adaptabilité",
-        defauts: "Inconstance, superficialité",
-        compatibilite: "Balance, Verseau, Bélier"
-      },
-      "Cancer": {
-        image: "https://upload.wikimedia.org/wikipedia/commons/0/0f/Cancer_symbol_%28bold%29.svg",
-        description: "Le Cancer est sensible, protecteur et très attaché à sa famille.",
-        qualites: "Émotivité, intuition, tendresse",
-        defauts: "Susceptibilité, dépendance",
-        compatibilite: "Poissons, Scorpion, Taureau"
-      },
-      "Lion": {
-        image: "https://upload.wikimedia.org/wikipedia/commons/3/35/Leo_symbol_%28bold%29.svg",
-        description: "Le Lion est charismatique, fier et aime briller. Il adore qu’on l’admire.",
-        qualites: "Générosité, loyauté, créativité",
-        defauts: "Orgueil, autoritarisme",
-        compatibilite: "Bélier, Sagittaire, Balance"
-      },
-      "Vierge": {
-        image: "https://upload.wikimedia.org/wikipedia/commons/d/df/Virgo_symbol_%28bold%29.svg",
-        description: "La Vierge est analytique, discrète et aime l’ordre. Elle est très perfectionniste.",
-        qualites: "Méthode, sens du détail, modestie",
-        defauts: "Critique, anxiété",
-        compatibilite: "Taureau, Capricorne, Cancer"
-      },
-      "Balance": {
-        image: "https://upload.wikimedia.org/wikipedia/commons/4/4c/Libra_symbol_%28bold%29.svg",
-        description: "La Balance est douce, équilibrée et a le sens de la justice. Elle déteste les conflits.",
-        qualites: "Charme, diplomatie, goût artistique",
-        defauts: "Indécision, dépendance affective",
-        compatibilite: "Gémeaux, Verseau, Lion"
-      },
-      "Scorpion": {
-        image: "https://upload.wikimedia.org/wikipedia/commons/f/f0/Scorpio_symbol_%28bold%29.svg",
-        description: "Le Scorpion est intense, mystérieux et passionné. Il ressent tout profondément.",
-        qualites: "Loyauté, force intérieure, intuition",
-        defauts: "Jalousie, contrôle",
-        compatibilite: "Cancer, Poissons, Capricorne"
-      },
-      "Sagittaire": {
-        image: "https://upload.wikimedia.org/wikipedia/commons/4/4f/Sagittarius_symbol_%28bold%29.svg",
-        description: "Le Sagittaire est optimiste, aventureux et adore la liberté.",
-        qualites: "Franc-parler, humour, ouverture d’esprit",
-        defauts: "Impulsivité, fuite de l’engagement",
-        compatibilite: "Bélier, Lion, Verseau"
-      },
-      "Capricorne": {
-        image: "https://upload.wikimedia.org/wikipedia/commons/e/ec/Capricorn_symbol_%28bold%29.svg",
-        description: "Le Capricorne est ambitieux, prudent et persévérant.",
-        qualites: "Patience, discipline, sens des responsabilités",
-        defauts: "Froideur, pessimisme",
-        compatibilite: "Taureau, Vierge, Scorpion"
-      },
-      "Verseau": {
-        image: "https://upload.wikimedia.org/wikipedia/commons/d/d1/Aquarius_symbol_%28bold%29.svg",
-        description: "Le Verseau est original, indépendant et très humaniste.",
-        qualites: "Créativité, liberté, sociabilité",
-        defauts: "Imprévisibilité, détachement émotionnel",
-        compatibilite: "Gémeaux, Balance, Sagittaire"
-      },
-      "Poissons": {
-        image: "https://upload.wikimedia.org/wikipedia/commons/5/55/Pisces_symbol_%28bold%29.svg",
-        description: "Le Poissons est rêveur, compatissant et très intuitif.",
-        qualites: "Sensibilité, imagination, spiritualité",
-        defauts: "Fuite de la réalité, naïveté",
-        compatibilite: "Cancer, Scorpion, Taureau"
-      }
-    };
+    document.getElementById("formulaire").addEventListener("submit", async function(e) {
+      e.preventDefault();
 
-    function trouverSigne() {
-      const prenom = document.getElementById("prenom").value.trim();
-      const dateStr = document.getElementById("dateNaissance").value;
-      const resultatDiv = document.getElementById("resultat");
+      const prenom = document.getElementById("prenom").value;
+      const date = document.getElementById("date").value;
+      const heure = document.getElementById("heure").value;
+      const ville = document.getElementById("ville").value;
 
-      if (!prenom || !dateStr) {
-        alert("Merci de remplir ton prénom et ta date de naissance !");
+      const [year, month, day] = date.split("-");
+      const [hour, minute] = heure.split(":");
+
+      const geoResponse = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(ville)}`);
+      const geoData = await geoResponse.json();
+
+      if (!geoData || geoData.length === 0) {
+        document.getElementById("resultat").innerText = "Ville introuvable. Réessaye.";
         return;
       }
 
-      const date = new Date(dateStr);
-      const jour = date.getDate();
-      const mois = date.getMonth() + 1;
+      const lat = geoData[0].lat;
+      const lon = geoData[0].lon;
 
-      let signe = "";
+      const url = "https://api.freeastrologyapi.com/v1/birth-chart";
 
-      if ((mois == 3 && jour >= 21) || (mois == 4 && jour <= 19)) signe = "Bélier";
-      else if ((mois == 4 && jour >= 20) || (mois == 5 && jour <= 20)) signe = "Taureau";
-      else if ((mois == 5 && jour >= 21) || (mois == 6 && jour <= 20)) signe = "Gémeaux";
-      else if ((mois == 6 && jour >= 21) || (mois == 7 && jour <= 22)) signe = "Cancer";
-      else if ((mois == 7 && jour >= 23) || (mois == 8 && jour <= 22)) signe = "Lion";
-      else if ((mois == 8 && jour >= 23) || (mois == 9 && jour <= 22)) signe = "Vierge";
-      else if ((mois == 9 && jour >= 23) || (mois == 10 && jour <= 22)) signe = "Balance";
-      else if ((mois == 10 && jour >= 23) || (mois == 11 && jour <= 21)) signe = "Scorpion";
-      else if ((mois == 11 && jour >= 22) || (mois == 12 && jour <= 21)) signe = "Sagittaire";
-      else if ((mois == 12 && jour >= 22) || (mois == 1 && jour <= 19)) signe = "Capricorne";
-      else if ((mois == 1 && jour >= 20) || (mois == 2 && jour <= 18)) signe = "Verseau";
-      else if ((mois == 2 && jour >= 19) || (mois == 3 && jour <= 20)) signe = "Poissons";
+      const payload = {
+        year: parseInt(year),
+        month: parseInt(month),
+        date: parseInt(day),
+        hours: parseInt(hour),
+        minutes: parseInt(minute),
+        seconds: 0,
+        latitude: parseFloat(lat),
+        longitude: parseFloat(lon),
+      };
 
-      const data = signes[signe];
+      try {
+        const response = await fetch(url, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer afig5KsRrE9qmaZ3d2DpK2W468M9OSo03wJkNX80"
+          },
+          body: JSON.stringify(payload)
+        });
 
-      resultatDiv.innerHTML = `
-        <p><strong>${prenom}</strong>, ton signe astrologique est : <strong>${signe}</strong></p>
-        <img src="${data.image}" alt="${signe}">
-        <p><em>${data.description}</em></p>
-        <p><strong>Qualités :</strong> ${data.qualites}</p>
-        <p><strong>Défauts :</strong> ${data.defauts}</p>
-        <p><strong>Compatibilité :</strong> ${data.compatibilite}</p>
-      `;
-    }
+        const data = await response.json();
+
+        if (!data || !data.sunSign) {
+          document.getElementById("resultat").innerText = "Erreur : données incomplètes.";
+          return;
+        }
+
+        let html = `<h2>${prenom}, voici ton thème astral :</h2>`;
+
+        html += `<p><strong>Signe solaire :</strong> ${data.sunSign}</p>`;
+        html += `<p><strong>Signe lunaire :</strong> ${data.moonSign}</p>`;
+        html += `<p><strong>Ascendant :</strong> ${data.ascendant}</p>`;
+
+        // Planètes
+        if (data.planets && data.planets.length > 0) {
+          html += `<h3>Planètes :</h3><ul>`;
+          data.planets.forEach(planet => {
+            html += `<li><strong>${planet.name}</strong> en ${planet.sign} à ${planet.degree}°</li>`;
+          });
+          html += `</ul>`;
+        }
+
+        // Maisons
+        if (data.houses && data.houses.length > 0) {
+          html += `<h3>Maisons astrologiques :</h3><ul>`;
+          data.houses.forEach(house => {
+            html += `<li><strong>Maison ${house.houseNumber}</strong> commence en ${house.sign} à ${house.degree}°</li>`;
+          });
+          html += `</ul>`;
+        }
+
+        // Aspects
+        if (data.aspects && data.aspects.length > 0) {
+          html += `<h3>Aspects planétaires :</h3><ul>`;
+          data.aspects.forEach(aspect => {
+            html += `<li>${aspect.planet1} <strong>${aspect.aspectType}</strong> ${aspect.planet2} (orbe : ${aspect.orb}°)</li>`;
+          });
+          html += `</ul>`;
+        }
+
+        document.getElementById("resultat").innerHTML = html;
+
+      } catch (error) {
+        console.error(error);
+        document.getElementById("resultat").innerText = "Erreur lors de l’appel à l’API.";
+      }
+    });
   </script>
 
 </body>
