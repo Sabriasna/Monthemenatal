@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Mon Signe Astrologique</title>
+  <link href="https://fonts.googleapis.com/css2?family=Agrandir&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Agrandir', sans-serif;
+      background-color: #1a0033;
+      color: white;
+      text-align: center;
+      padding: 40px;
+    }
+
+    input, button {
+      font-size: 18px;
+      padding: 10px;
+      margin: 10px;
+      border-radius: 5px;
+      border: none;
+    }
+
+    button {
+      background-color: white;
+      color: #1a0033;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    #resultat {
+      margin-top: 30px;
+      font-size: 20px;
+    }
+
+    img {
+      width: 100px;
+      margin-top: 15px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Découvre ton signe astrologique</h1>
+
+  <input type="text" id="prenom" placeholder="Ton prénom" /><br>
+  <input type="date" id="dateNaissance" /><br>
+
+  <button onclick="trouverSigne()">Voir mon signe</button>
+
+  <div id="resultat"></div>
+
+  <script>
+    function trouverSigne() {
+      const prenom = document.getElementById("prenom").value.trim();
+      const dateStr = document.getElementById("dateNaissance").value;
+      const resultatDiv = document.getElementById("resultat");
+
+      if (!prenom || !dateStr) {
+        alert("Merci de remplir ton prénom et ta date de naissance !");
+        return;
+      }
+
+      const date = new Date(dateStr);
+      const jour = date.getDate();
+      const mois = date.getMonth() + 1; // janvier = 0
+
+      let signe = "";
+      let image = "";
+
+      if ((mois == 3 && jour >= 21) || (mois == 4 && jour <= 19)) {
+        signe = "Bélier"; image = "https://upload.wikimedia.org/wikipedia/commons/9/9b/Aries_symbol_%28bold%29.svg";
+      } else if ((mois == 4 && jour >= 20) || (mois == 5 && jour <= 20)) {
+        signe = "Taureau"; image = "https://upload.wikimedia.org/wikipedia/commons/3/3a/Taurus_symbol_%28bold%29.svg";
+      } else if ((mois == 5 && jour >= 21) || (mois == 6 && jour <= 20)) {
+        signe = "Gémeaux"; image = "https://upload.wikimedia.org/wikipedia/commons/8/8b/Gemini_symbol_%28bold%29.svg";
+      } else if ((mois == 6 && jour >= 21) || (mois == 7 && jour <= 22)) {
+        signe = "Cancer"; image = "https://upload.wikimedia.org/wikipedia/commons/0/0f/Cancer_symbol_%28bold%29.svg";
+      } else if ((mois == 7 && jour >= 23) || (mois == 8 && jour <= 22)) {
+        signe = "Lion"; image = "https://upload.wikimedia.org/wikipedia/commons/3/35/Leo_symbol_%28bold%29.svg";
+      } else if ((mois == 8 && jour >= 23) || (mois == 9 && jour <= 22)) {
+        signe = "Vierge"; image = "https://upload.wikimedia.org/wikipedia/commons/d/df/Virgo_symbol_%28bold%29.svg";
+      } else if ((mois == 9 && jour >= 23) || (mois == 10 && jour <= 22)) {
+        signe = "Balance"; image = "https://upload.wikimedia.org/wikipedia/commons/4/4c/Libra_symbol_%28bold%29.svg";
+      } else if ((mois == 10 && jour >= 23) || (mois == 11 && jour <= 21)) {
+        signe = "Scorpion"; image = "https://upload.wikimedia.org/wikipedia/commons/f/f0/Scorpio_symbol_%28bold%29.svg";
+      } else if ((mois == 11 && jour >= 22) || (mois == 12 && jour <= 21)) {
+        signe = "Sagittaire"; image = "https://upload.wikimedia.org/wikipedia/commons/4/4f/Sagittarius_symbol_%28bold%29.svg";
+      } else if ((mois == 12 && jour >= 22) || (mois == 1 && jour <= 19)) {
+        signe = "Capricorne"; image = "https://upload.wikimedia.org/wikipedia/commons/e/ec/Capricorn_symbol_%28bold%29.svg";
+      } else if ((mois == 1 && jour >= 20) || (mois == 2 && jour <= 18)) {
+        signe = "Verseau"; image = "https://upload.wikimedia.org/wikipedia/commons/d/d1/Aquarius_symbol_%28bold%29.svg";
+      } else if ((mois == 2 && jour >= 19) || (mois == 3 && jour <= 20)) {
+        signe = "Poissons"; image = "https://upload.wikimedia.org/wikipedia/commons/5/55/Pisces_symbol_%28bold%29.svg";
+      }
+
+      resultatDiv.innerHTML = `
+        <p><strong>${prenom}</strong>, ton signe astrologique est : <strong>${signe}</strong></p>
+        <img src="${image}" alt="${signe}" />
+      `;
+    }
+  </script>
+</body>
+</html>
